@@ -1159,13 +1159,20 @@ namespace PDFReader
             m_InkManager.Mode = Windows.UI.Input.Inking.InkManipulationMode.Erasing;
 
             var strokes = m_InkManager.GetStrokes();
+            var HighLightStrokes = m_HighLightManager.GetStrokes();
 
             for (int i = 0; i < strokes.Count; i++)
             {
                 strokes[i].Selected = true;
             }
 
+            for (int i = 0; i < HighLightStrokes.Count; i++)
+            {
+                HighLightStrokes[i].Selected = true;
+            }
+
             m_InkManager.DeleteSelected();
+            m_HighLightManager.DeleteSelected();
 
             InkCanvas.Background = new SolidColorBrush(Colors.White);
             InkCanvas.Children.Clear();

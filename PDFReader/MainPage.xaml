@@ -40,6 +40,7 @@
                     <!--<Button x:Name="Reco" AutomationProperties.Name="Recognition" Click="Recognize" Style="{StaticResource CharactersAppBarButtonStyle}" Grid.Column="1" />-->
                     <!--<Button x:Name="Find" IsEnabled="False" AutomationProperties.Name="Find" Style="{StaticResource SearchAppBarButtonStyle}" Grid.Column="1" />-->
 
+                    <Button x:Name="ClearAll" AutomationProperties.Name="Clear All" Grid.Column="2" Click="ClearAll" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
                     <Button x:Name="ModeErase" AutomationProperties.Name="Erase" Grid.Column="2" Click="Erase" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
                     <!--<Button x:Name="ModeSelect" AutomationProperties.Name="Select" Grid.Column="2" IsEnabled="False" Style="{StaticResource SelectAllAppBarButtonStyle}"/>-->
 
