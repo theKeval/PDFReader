@@ -585,20 +585,23 @@ namespace PDFReader
         {
             if (e.Pointer.PointerId == m_PenId)
             {
-                Windows.UI.Input.PointerPoint pt = e.GetCurrentPoint(InkCanvas);
+                //if (!App.isReadMode)
+                //{
+                    Windows.UI.Input.PointerPoint pt = e.GetCurrentPoint(InkCanvas);
 
-                if (m_CurrentMode == "Erase")
-                {
-                    System.Diagnostics.Debug.WriteLine("Erasing : Pointer Released");
+                    if (m_CurrentMode == "Erase")
+                    {
+                        System.Diagnostics.Debug.WriteLine("Erasing : Pointer Released");
 
-                    m_InkManager.ProcessPointerUp(pt);
-                    m_HighLightManager.ProcessPointerUp(pt);
-                }
-                else
-                {
-                    // Pass the pointer information to the InkManager. 
-                    CurrentManager.ProcessPointerUp(pt);
-                }
+                        m_InkManager.ProcessPointerUp(pt);
+                        m_HighLightManager.ProcessPointerUp(pt);
+                    }
+                    else
+                    {
+                        // Pass the pointer information to the InkManager. 
+                        CurrentManager.ProcessPointerUp(pt);
+                    }
+                //}
             }
             else if (e.Pointer.PointerId == _touchID)
             {

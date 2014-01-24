@@ -32,9 +32,9 @@
 
     </Page.BottomAppBar>-->
 
-    <Page.TopAppBar>
+    <Page.BottomAppBar>
 
-        <AppBar x:Name="topAppBar" Padding="10,0,10,0">
+        <AppBar x:Name="BottomAppBar" Padding="10,0,10,0">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0">
                     <!--<Button x:Name="Reco" AutomationProperties.Name="Recognition" Click="Recognize" Style="{StaticResource CharactersAppBarButtonStyle}" Grid.Column="1" />-->
@@ -50,12 +50,12 @@
                     <Button x:Name="HighlightWidth" AutomationProperties.Name="Highlight Width" Click="SelectHighlightSize" Grid.Column="4" Style="{StaticResource EditAppBarButtonStyle}" Margin="5,0,30,0"/>
 
                     <Button x:Name="SaveBtn" Grid.Column="5" Click="SelectAction" Style="{StaticResource SaveAppBarButtonStyle}" Margin="30,0,10,0"/>
-                    <Button x:Name="ReadModeBtn" Grid.Column="5" Click="ReadMode_OnClick" Style="{StaticResource SaveAppBarButtonStyle}" Margin="30,0,5,0"/>
+                    <Button x:Name="ReadModeBtn" Grid.Column="5" Click="ReadMode_OnClick" Style="{StaticResource ReadModeAppBarButtonStyle}" Margin="30,0,5,0"/>
                 </StackPanel>
             </Grid>
         </AppBar>
 
-    </Page.TopAppBar>
+    </Page.BottomAppBar>
 
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
