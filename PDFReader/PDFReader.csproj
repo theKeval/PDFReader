@@ -149,10 +149,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="MuPDF.WinRT\Win8\MuPDFWinRT.vcxproj">
-      <Project>{56c66c4f-3c21-4929-baf1-2eda2ec56823}</Project>
-      <Name>MuPDFWinRT</Name>
-    </ProjectReference>
+    <Reference Include="MuPDFWinRT">
+      <HintPath>MuPDF.WinRT\Win8\Win32\Debug\MuPDFWinRT.winmd</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
