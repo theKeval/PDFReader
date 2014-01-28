@@ -83,35 +83,43 @@ namespace PDFReader
                 App.FileDisplayName = PDFfile.DisplayName;    // this name included with extension .pdf
 
                 fileStorageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
-            }
 
-            using (var stream = await PDFfile.OpenReadAsync())
-            {
-                IBuffer readBuffer;
-                using (IInputStream inputStreamAt = stream.GetInputStreamAt(0))
-                using (var dataReader = new DataReader(inputStreamAt))
+
+                using (var stream = await PDFfile.OpenReadAsync())
                 {
-                    uint bufferSize = await dataReader.LoadAsync((uint)stream.Size);
-                    readBuffer = dataReader.ReadBuffer(bufferSize);
+                    IBuffer readBuffer;
+                    using (IInputStream inputStreamAt = stream.GetInputStreamAt(0))
+                    using (var dataReader = new DataReader(inputStreamAt))
+                    {
+                        uint bufferSize = await dataReader.LoadAsync((uint)stream.Size);
+                        readBuffer = dataReader.ReadBuffer(bufferSize);
+                    }
+
+                    pdfDocument = Document.Create(readBuffer, DocumentType.PDF, (int)Windows.Graphics.Display.DisplayProperties.LogicalDpi);
                 }
 
-                pdfDocument = Document.Create(readBuffer, DocumentType.PDF, (int)Windows.Graphics.Display.DisplayProperties.LogicalDpi);
+                if (pdfDocument.PageCount == 0)
+                    return;
+
+                for (var index = 0; index < pdfDocument.PageCount; index++)
+                {
+                    pages.Add(new DocumentPage(pdfDocument, index, ActualHeight));
+                }
+
+                // Initializing pageCount variable
+                // pageCount = 0;
+
+                flipView.SelectionChanged += flipView_SelectionChanged;
+                flipView.Loaded += flipView_Loaded;
+                flipView.ItemsSource = pages;
+
             }
-
-            if (pdfDocument.PageCount == 0)
-                return;
-
-            for (var index = 0; index < pdfDocument.PageCount; index++)
+            else
             {
-                pages.Add(new DocumentPage(pdfDocument, index, ActualHeight));
+                this.Frame.Navigate(typeof(HomePage));
             }
 
-            // Initializing pageCount variable
-            // pageCount = 0;
 
-            flipView.SelectionChanged += flipView_SelectionChanged;
-            flipView.Loaded += flipView_Loaded;
-            flipView.ItemsSource = pages;
 
             #endregion
 
@@ -587,20 +595,20 @@ namespace PDFReader
             {
                 //if (!App.isReadMode)
                 //{
-                    Windows.UI.Input.PointerPoint pt = e.GetCurrentPoint(InkCanvas);
+                Windows.UI.Input.PointerPoint pt = e.GetCurrentPoint(InkCanvas);
 
-                    if (m_CurrentMode == "Erase")
-                    {
-                        System.Diagnostics.Debug.WriteLine("Erasing : Pointer Released");
+                if (m_CurrentMode == "Erase")
+                {
+                    System.Diagnostics.Debug.WriteLine("Erasing : Pointer Released");
 
-                        m_InkManager.ProcessPointerUp(pt);
-                        m_HighLightManager.ProcessPointerUp(pt);
-                    }
-                    else
-                    {
-                        // Pass the pointer information to the InkManager. 
-                        CurrentManager.ProcessPointerUp(pt);
-                    }
+                    m_InkManager.ProcessPointerUp(pt);
+                    m_HighLightManager.ProcessPointerUp(pt);
+                }
+                else
+                {
+                    // Pass the pointer information to the InkManager. 
+                    CurrentManager.ProcessPointerUp(pt);
+                }
                 //}
             }
             else if (e.Pointer.PointerId == _touchID)
@@ -1176,6 +1184,8 @@ namespace PDFReader
 
             InkCanvas.Background = new SolidColorBrush(Colors.White);
             InkCanvas.Children.Clear();
+
+            InkCanvas.Children.Add(flipView);
         }
 
         private void Refresh(object sender, RoutedEventArgs e)

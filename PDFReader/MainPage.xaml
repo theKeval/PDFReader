@@ -40,7 +40,7 @@
                     <!--<Button x:Name="Reco" AutomationProperties.Name="Recognition" Click="Recognize" Style="{StaticResource CharactersAppBarButtonStyle}" Grid.Column="1" />-->
                     <!--<Button x:Name="Find" IsEnabled="False" AutomationProperties.Name="Find" Style="{StaticResource SearchAppBarButtonStyle}" Grid.Column="1" />-->
 
-                    <Button x:Name="ClearAll" AutomationProperties.Name="Clear All" Grid.Column="2" Click="ClearAll" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
+                    <Button x:Name="ClearAll" AutomationProperties.Name="Clear All" Grid.Column="2" Click="Clear" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
                     <Button x:Name="ModeErase" AutomationProperties.Name="Erase" Grid.Column="2" Click="Erase" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
                     <!--<Button x:Name="ModeSelect" AutomationProperties.Name="Select" Grid.Column="2" IsEnabled="False" Style="{StaticResource SelectAllAppBarButtonStyle}"/>-->
 
@@ -51,7 +51,7 @@
                     <Button x:Name="HighlightWidth" AutomationProperties.Name="Highlight Width" Click="SelectHighlightSize" Grid.Column="4" Style="{StaticResource EditAppBarButtonStyle}" Margin="5,0,30,0"/>
 
                     <Button x:Name="SaveBtn" Grid.Column="5" Click="SelectAction" Style="{StaticResource SaveAppBarButtonStyle}" Margin="30,0,10,0"/>
-                    <Button x:Name="ReadModeBtn" Grid.Column="5" Click="ReadMode_OnClick" Style="{StaticResource ReadModeAppBarButtonStyle}" Margin="30,0,5,0"/>
+                    <!--<Button x:Name="ReadModeBtn" Grid.Column="5" Click="ReadMode_OnClick" Style="{StaticResource ReadModeAppBarButtonStyle}" Margin="30,0,5,0"/>-->
                 </StackPanel>
             </Grid>
         </AppBar>
@@ -60,12 +60,12 @@
 
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-        
-        <Canvas Name="HighLightCanvas" Background="Transparent" />
+
+        <Canvas Name="HighLightCanvas" Background="Transparent" PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased" />
         
         <Canvas Name="InkCanvas" Background="White"  PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased">
-        
-            <FlipView Name="flipView">
+
+            <FlipView Name="flipView" PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased">
             <FlipView.ItemTemplate>
                 <DataTemplate>
                     <!--<ScrollViewer
