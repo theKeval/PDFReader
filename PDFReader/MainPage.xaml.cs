@@ -1184,10 +1184,13 @@ namespace PDFReader
 
             InkCanvas.Background = new SolidColorBrush(Colors.White);
             InkCanvas.Children.Clear();
+<<<<<<< HEAD
 
             InkCanvas.Children.Add(flipView);
 
             m_InkManager.Mode = Windows.UI.Input.Inking.InkManipulationMode.Inking;
+=======
+>>>>>>> parent of b3a9848... All Bugs solved
         }
 
         private void Refresh(object sender, RoutedEventArgs e)
