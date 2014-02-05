@@ -83,43 +83,35 @@ namespace PDFReader
                 App.FileDisplayName = PDFfile.DisplayName;    // this name included with extension .pdf
 
                 fileStorageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
-
-
-                using (var stream = await PDFfile.OpenReadAsync())
-                {
-                    IBuffer readBuffer;
-                    using (IInputStream inputStreamAt = stream.GetInputStreamAt(0))
-                    using (var dataReader = new DataReader(inputStreamAt))
-                    {
-                        uint bufferSize = await dataReader.LoadAsync((uint)stream.Size);
-                        readBuffer = dataReader.ReadBuffer(bufferSize);
-                    }
-
-                    pdfDocument = Document.Create(readBuffer, DocumentType.PDF, (int)Windows.Graphics.Display.DisplayProperties.LogicalDpi);
-                }
-
-                if (pdfDocument.PageCount == 0)
-                    return;
-
-                for (var index = 0; index < pdfDocument.PageCount; index++)
-                {
-                    pages.Add(new DocumentPage(pdfDocument, index, ActualHeight));
-                }
-
-                // Initializing pageCount variable
-                // pageCount = 0;
-
-                flipView.SelectionChanged += flipView_SelectionChanged;
-                flipView.Loaded += flipView_Loaded;
-                flipView.ItemsSource = pages;
-
             }
-            else
+
+            using (var stream = await PDFfile.OpenReadAsync())
             {
-                this.Frame.Navigate(typeof(HomePage));
+                IBuffer readBuffer;
+                using (IInputStream inputStreamAt = stream.GetInputStreamAt(0))
+                using (var dataReader = new DataReader(inputStreamAt))
+                {
+                    uint bufferSize = await dataReader.LoadAsync((uint)stream.Size);
+                    readBuffer = dataReader.ReadBuffer(bufferSize);
+                }
+
+                pdfDocument = Document.Create(readBuffer, DocumentType.PDF, (int)Windows.Graphics.Display.DisplayProperties.LogicalDpi);
             }
 
+            if (pdfDocument.PageCount == 0)
+                return;
 
+            for (var index = 0; index < pdfDocument.PageCount; index++)
+            {
+                pages.Add(new DocumentPage(pdfDocument, index, ActualHeight));
+            }
+
+            // Initializing pageCount variable
+            // pageCount = 0;
+
+            flipView.SelectionChanged += flipView_SelectionChanged;
+            flipView.Loaded += flipView_Loaded;
+            flipView.ItemsSource = pages;
 
             #endregion
 
@@ -595,26 +587,26 @@ namespace PDFReader
             {
                 //if (!App.isReadMode)
                 //{
-                Windows.UI.Input.PointerPoint pt = e.GetCurrentPoint(InkCanvas);
+                    Windows.UI.Input.PointerPoint pt = e.GetCurrentPoint(InkCanvas);
 
-                if (m_CurrentMode == "Erase")
-                {
-                    System.Diagnostics.Debug.WriteLine("Erasing : Pointer Released");
+                    if (m_CurrentMode == "Erase")
+                    {
+                        System.Diagnostics.Debug.WriteLine("Erasing : Pointer Released");
 
-                    m_InkManager.ProcessPointerUp(pt);
-                    m_HighLightManager.ProcessPointerUp(pt);
-                }
-                else
-                {
-                    // Pass the pointer information to the InkManager. 
-                    CurrentManager.ProcessPointerUp(pt);
-                }
+                        m_InkManager.ProcessPointerUp(pt);
+                        m_HighLightManager.ProcessPointerUp(pt);
+                    }
+                    else
+                    {
+                        // Pass the pointer information to the InkManager. 
+                        CurrentManager.ProcessPointerUp(pt);
+                    }
                 //}
             }
             else if (e.Pointer.PointerId == _touchID)
             {
-                if (!App.isReadMode)
-                {
+                //if (!App.isReadMode)
+                //{
                     // Process touch input 
                     Windows.UI.Input.PointerPoint pt = e.GetCurrentPoint(InkCanvas);
 
@@ -630,7 +622,7 @@ namespace PDFReader
                         // Pass the pointer information to the InkManager. 
                         CurrentManager.ProcessPointerUp(pt);
                     }
-                }
+                //}
             }
 
             _touchID = 0;
@@ -700,8 +692,8 @@ namespace PDFReader
 
             else if (e.Pointer.PointerId == _touchID)
             {
-                if (!App.isReadMode)
-                {
+                //if (!App.isReadMode)
+                //{
                     // Process touch input
                     PointerPoint pt = e.GetCurrentPoint(InkCanvas);
 
@@ -751,7 +743,7 @@ namespace PDFReader
                         // Pass the pointer information to the InkManager. 
                         CurrentManager.ProcessPointerUpdate(pt);
                     }
-                }
+                //}
             }
 
 
@@ -799,8 +791,8 @@ namespace PDFReader
                 else if (pointerDevType == PointerDeviceType.Touch)
                 {
                     // Process touch input
-                    if (!App.isReadMode)
-                    {
+                    //if (!App.isReadMode)
+                    //{
                         if (m_CurrentMode == "Erase")
                         {
                             System.Diagnostics.Debug.WriteLine("Erasing : Pointer Pressed");
@@ -817,7 +809,7 @@ namespace PDFReader
                         m_PenId = pt.PointerId;
 
                         e.Handled = true;
-                    }
+                    //}
                 }
             }
             catch (Exception ex)
@@ -1022,7 +1014,7 @@ namespace PDFReader
         private void RefreshCanvas()
         {
             InkCanvas.Children.Clear();
-            InkCanvas.Children.Add(flipView);
+            //InkCanvas.Children.Add(flipView);
 
             HighLightCanvas.Children.Clear();
 
@@ -1162,7 +1154,7 @@ namespace PDFReader
             }
         }
 
-        private void Clear(object sender, RoutedEventArgs e)
+        private void ClearAll_onClick(object sender, RoutedEventArgs e)
         {
             m_InkManager.Mode = Windows.UI.Input.Inking.InkManipulationMode.Erasing;
 
@@ -1182,15 +1174,11 @@ namespace PDFReader
             m_InkManager.DeleteSelected();
             m_HighLightManager.DeleteSelected();
 
-            InkCanvas.Background = new SolidColorBrush(Colors.White);
-            InkCanvas.Children.Clear();
-<<<<<<< HEAD
-
-            InkCanvas.Children.Add(flipView);
 
             m_InkManager.Mode = Windows.UI.Input.Inking.InkManipulationMode.Inking;
-=======
->>>>>>> parent of b3a9848... All Bugs solved
+
+            //InkCanvas.Background = new SolidColorBrush(Colors.White);
+            //InkCanvas.Children.Clear();
         }
 
         private void Refresh(object sender, RoutedEventArgs e)

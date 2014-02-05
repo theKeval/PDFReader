@@ -12,11 +12,11 @@
         <AppBar x:Name="bottomappbar" Padding="10,0,10,0">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">-->
-    
-                    <!--<Button x:Name="Reco" AutomationProperties.Name="Recognition" Click="Recognize" Style="{StaticResource CharactersAppBarButtonStyle}" Grid.Column="1" />-->
-                    <!--<Button x:Name="Find" IsEnabled="False" AutomationProperties.Name="Find" Style="{StaticResource SearchAppBarButtonStyle}" Grid.Column="1" />-->
 
-                    <!--<Button x:Name="ModeErase" AutomationProperties.Name="Erase" Grid.Column="2" Click="Erase" Style="{StaticResource TrimAppBarButtonStyle}"/>
+    <!--<Button x:Name="Reco" AutomationProperties.Name="Recognition" Click="Recognize" Style="{StaticResource CharactersAppBarButtonStyle}" Grid.Column="1" />-->
+    <!--<Button x:Name="Find" IsEnabled="False" AutomationProperties.Name="Find" Style="{StaticResource SearchAppBarButtonStyle}" Grid.Column="1" />-->
+
+    <!--<Button x:Name="ModeErase" AutomationProperties.Name="Erase" Grid.Column="2" Click="Erase" Style="{StaticResource TrimAppBarButtonStyle}"/>
                     <Button x:Name="ModeSelect" AutomationProperties.Name="Select" Grid.Column="2" IsEnabled="False" Style="{StaticResource SelectAllAppBarButtonStyle}"/>
 
                     <Button x:Name="InkColors" AutomationProperties.Name="Color" Grid.Column="3" Click="SelectColor" Style="{StaticResource FontColorAppBarButtonStyle}"/>
@@ -40,11 +40,7 @@
                     <!--<Button x:Name="Reco" AutomationProperties.Name="Recognition" Click="Recognize" Style="{StaticResource CharactersAppBarButtonStyle}" Grid.Column="1" />-->
                     <!--<Button x:Name="Find" IsEnabled="False" AutomationProperties.Name="Find" Style="{StaticResource SearchAppBarButtonStyle}" Grid.Column="1" />-->
 
-<<<<<<< HEAD
-                    <Button x:Name="ClearAll" AutomationProperties.Name="Clear All" Grid.Column="2" Click="Clear" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
-=======
-                    <Button x:Name="ClearAll" AutomationProperties.Name="Clear All" Grid.Column="2" Click="ClearAll" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
->>>>>>> parent of b3a9848... All Bugs solved
+                    <Button x:Name="ClearAll" AutomationProperties.Name="Clear All" Grid.Column="2" Click="ClearAll_onClick" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
                     <Button x:Name="ModeErase" AutomationProperties.Name="Erase" Grid.Column="2" Click="Erase" Style="{StaticResource TrimAppBarButtonStyle}" Margin="10,0,30,0"/>
                     <!--<Button x:Name="ModeSelect" AutomationProperties.Name="Select" Grid.Column="2" IsEnabled="False" Style="{StaticResource SelectAllAppBarButtonStyle}"/>-->
 
@@ -55,7 +51,7 @@
                     <Button x:Name="HighlightWidth" AutomationProperties.Name="Highlight Width" Click="SelectHighlightSize" Grid.Column="4" Style="{StaticResource EditAppBarButtonStyle}" Margin="5,0,30,0"/>
 
                     <Button x:Name="SaveBtn" Grid.Column="5" Click="SelectAction" Style="{StaticResource SaveAppBarButtonStyle}" Margin="30,0,10,0"/>
-                    <Button x:Name="ReadModeBtn" Grid.Column="5" Click="ReadMode_OnClick" Style="{StaticResource ReadModeAppBarButtonStyle}" Margin="30,0,5,0"/>
+                    <!--<Button x:Name="ReadModeBtn" Grid.Column="5" Click="ReadMode_OnClick" Style="{StaticResource ReadModeAppBarButtonStyle}" Margin="30,0,5,0"/>-->
                 </StackPanel>
             </Grid>
         </AppBar>
@@ -64,21 +60,10 @@
 
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-<<<<<<< HEAD
 
-        <Canvas Name="HighLightCanvas" Background="Transparent" PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased" />
-        
-        <Canvas Name="InkCanvas" Background="White"  PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased">
 
-            <FlipView Name="flipView" PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased">
-=======
-        
-        <Canvas Name="HighLightCanvas" Background="Transparent" />
-        
-        <Canvas Name="InkCanvas" Background="White"  PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased">
-        
-            <FlipView Name="flipView">
->>>>>>> parent of b3a9848... All Bugs solved
+
+        <FlipView Name="flipView">
             <FlipView.ItemTemplate>
                 <DataTemplate>
                     <!--<ScrollViewer
@@ -92,18 +77,23 @@
                         MinZoomFactor="1"            
                         MaxZoomFactor="3.5">-->
 
-                        
-                            <Image Source="{Binding Image}" Width="{Binding Width}" Height="{Binding Height}" Stretch="Uniform" HorizontalAlignment="Center" Margin="0"/>
-                        
-                        
+
+                    <Image Source="{Binding Image}" Width="{Binding Width}" Height="{Binding Height}" Stretch="Uniform" HorizontalAlignment="Center" Margin="0"/>
+
+
                     <!--</ScrollViewer>-->
 
                 </DataTemplate>
             </FlipView.ItemTemplate>
-            </FlipView>
-            
-        </Canvas>
+        </FlipView>
+
+
+        <Canvas Name="HighLightCanvas" Background="Transparent" />
+
+        <Canvas Name="InkCanvas" Background="Transparent"  PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased" />
+
+        <!--</Canvas>-->
 
     </Grid>
-    
+
 </Page>
