@@ -88,9 +88,9 @@
         </FlipView>
 
 
-        <Canvas Name="HighLightCanvas" Background="Transparent" />
+        <Canvas Name="HighLightCanvas" Background="Transparent" Margin="100 0" />
 
-        <Canvas Name="InkCanvas" Background="Transparent"  PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased" />
+        <Canvas Name="InkCanvas" Margin="100 0" Background="Transparent"  PointerReleased="OnCanvasPointerReleased" PointerExited="OnCanvasPointerReleased" />
 
         <!--</Canvas>-->
 

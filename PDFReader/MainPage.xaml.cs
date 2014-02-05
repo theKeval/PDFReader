@@ -71,47 +71,63 @@ namespace PDFReader
 
             //var file = await StorageFile.GetFileFromPathAsync(App.FilePath);
 
-            FileOpenPicker fop = new FileOpenPicker();
-            fop.FileTypeFilter.Add(".pdf");
-            fop.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            fop.CommitButtonText = "Open PDF";
-
-            var PDFfile = await fop.PickSingleFileAsync();
-            if (PDFfile != null)
+            try
             {
-                App.FilePath = PDFfile.Path;
-                App.FileDisplayName = PDFfile.DisplayName;    // this name included with extension .pdf
 
-                fileStorageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
-            }
+                FileOpenPicker fop = new FileOpenPicker();
+                fop.FileTypeFilter.Add(".pdf");
+                fop.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                fop.CommitButtonText = "Open PDF";
 
-            using (var stream = await PDFfile.OpenReadAsync())
-            {
-                IBuffer readBuffer;
-                using (IInputStream inputStreamAt = stream.GetInputStreamAt(0))
-                using (var dataReader = new DataReader(inputStreamAt))
+                var PDFfile = await fop.PickSingleFileAsync();
+                if (PDFfile != null)
                 {
-                    uint bufferSize = await dataReader.LoadAsync((uint)stream.Size);
-                    readBuffer = dataReader.ReadBuffer(bufferSize);
+                    App.FilePath = PDFfile.Path;
+                    App.FileDisplayName = PDFfile.DisplayName;    // this name included with extension .pdf
+
+                    fileStorageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
                 }
 
-                pdfDocument = Document.Create(readBuffer, DocumentType.PDF, (int)Windows.Graphics.Display.DisplayProperties.LogicalDpi);
+                using (var stream = await PDFfile.OpenReadAsync())
+                {
+                    IBuffer readBuffer;
+                    using (IInputStream inputStreamAt = stream.GetInputStreamAt(0))
+                    using (var dataReader = new DataReader(inputStreamAt))
+                    {
+                        uint bufferSize = await dataReader.LoadAsync((uint)stream.Size);
+                        readBuffer = dataReader.ReadBuffer(bufferSize);
+                    }
+
+                    pdfDocument = Document.Create(readBuffer, DocumentType.PDF, (int)Windows.Graphics.Display.DisplayProperties.LogicalDpi);
+                }
+
+                if (pdfDocument.PageCount == 0)
+                    return;
+
+                for (var index = 0; index < pdfDocument.PageCount; index++)
+                {
+                    pages.Add(new DocumentPage(pdfDocument, index, ActualHeight));
+                }
+
+                // Initializing pageCount variable
+                // pageCount = 0;
+
+                flipView.SelectionChanged += flipView_SelectionChanged;
+                flipView.Loaded += flipView_Loaded;
+                flipView.ItemsSource = pages;
+
             }
-
-            if (pdfDocument.PageCount == 0)
-                return;
-
-            for (var index = 0; index < pdfDocument.PageCount; index++)
+            catch (NullReferenceException nre)
             {
-                pages.Add(new DocumentPage(pdfDocument, index, ActualHeight));
+                this.Frame.Navigate(typeof(HomePage));
+            }
+            catch (Exception ex)
+            {
+                MessageDialog ms = new MessageDialog(ex.Message);
+                ms.ShowAsync();
             }
 
-            // Initializing pageCount variable
-            // pageCount = 0;
-
-            flipView.SelectionChanged += flipView_SelectionChanged;
-            flipView.Loaded += flipView_Loaded;
-            flipView.ItemsSource = pages;
+            
 
             #endregion
 
@@ -240,6 +256,24 @@ namespace PDFReader
                     if (abc.Count == 0)
                     {
                         //return;
+
+                        StorageFolder storageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
+                        if (isMoveForward)
+                        {
+                            if (await DoesFileExist((flipView.SelectedIndex - 1).ToString() + ".png"))
+                            {
+                                var InkFile = await storageFolder.GetFileAsync((flipView.SelectedIndex - 1).ToString() + ".png");
+                                await InkFile.DeleteAsync();   
+                            }
+                        }
+                        else
+                        {
+                            if (await DoesFileExist((flipView.SelectedIndex + 1).ToString() + ".png"))
+                            {
+                                var InkFile = await storageFolder.GetFileAsync((flipView.SelectedIndex + 1).ToString() + ".png");
+                                await InkFile.DeleteAsync();
+                            }
+                        }
                     }
                     else
                     {
@@ -280,6 +314,25 @@ namespace PDFReader
                     if (abc_HighLight.Count == 0)
                     {
                         // return;
+
+                        StorageFolder storageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
+                        if (isMoveForward)
+                        {
+                            if (await DoesFileExist((flipView.SelectedIndex - 1).ToString() + "_HighLight.png"))
+                            {
+                                var HighLightFile = await storageFolder.GetFileAsync((flipView.SelectedIndex - 1).ToString() + "_HighLight.png");
+                                await HighLightFile.DeleteAsync();
+                            }
+                        }
+                        else
+                        {
+                            if (await DoesFileExist((flipView.SelectedIndex + 1).ToString() + "_HighLight.png"))
+                            {
+                                var InkFile = await storageFolder.GetFileAsync((flipView.SelectedIndex + 1).ToString() + "_HighLight.png");
+                                await InkFile.DeleteAsync();
+                            }
+                        }
+
                     }
                     else
                     {
@@ -1174,6 +1227,9 @@ namespace PDFReader
             m_InkManager.DeleteSelected();
             m_HighLightManager.DeleteSelected();
 
+            InkCanvas.Children.Clear();
+            HighLightCanvas.Children.Clear();
+            //InkCanvas.Children.Add(flipView);
 
             m_InkManager.Mode = Windows.UI.Input.Inking.InkManipulationMode.Inking;
 
@@ -1407,6 +1463,8 @@ namespace PDFReader
                     var abc = m_InkManager.GetStrokes();
                     var abc_HighLight = m_HighLightManager.GetStrokes();
 
+                    StorageFolder storageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
+
                     #region save strokes -> Pen Ink
 
                     if (abc.Count == 0)
@@ -1416,7 +1474,6 @@ namespace PDFReader
                     else
                     {
                         StorageFile fileToSave;
-                        StorageFolder storageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
 
                         fileToSave = await storageFolder.CreateFileAsync(currentPageFileName, CreationCollisionOption.ReplaceExisting);
 
@@ -1438,7 +1495,7 @@ namespace PDFReader
                     else
                     {
                         StorageFile fileToSave_HighLight;
-                        StorageFolder storageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
+                        //StorageFolder storageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(App.FileDisplayName, CreationCollisionOption.OpenIfExists);
 
                         fileToSave_HighLight = await storageFolder.CreateFileAsync(currentPageFileName_HighLight, CreationCollisionOption.ReplaceExisting);
 
@@ -1450,6 +1507,20 @@ namespace PDFReader
                     }
 
                     #endregion
+
+                    if (abc.Count == 0 && abc_HighLight.Count == 0)
+                    {
+                        if (await DoesFileExist(currentPageFileName))
+                        {
+                            var InkFile = await storageFolder.GetFileAsync(currentPageFileName);
+                            await InkFile.DeleteAsync();
+                        }
+                        if (await DoesFileExist(currentPageFileName_HighLight))
+                        {
+                            var HighLightFile = await storageFolder.GetFileAsync(currentPageFileName_HighLight);
+                            await HighLightFile.DeleteAsync();
+                        }
+                    }
 
                     MessageDialog ms = new MessageDialog("Annotations saved successfully..!!!", "PDF with Annotation");
                     await ms.ShowAsync();
