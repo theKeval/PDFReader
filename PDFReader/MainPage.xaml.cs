@@ -1186,6 +1186,8 @@ namespace PDFReader
             InkCanvas.Children.Clear();
 
             InkCanvas.Children.Add(flipView);
+
+            m_InkManager.Mode = Windows.UI.Input.Inking.InkManipulationMode.Inking;
         }
 
         private void Refresh(object sender, RoutedEventArgs e)

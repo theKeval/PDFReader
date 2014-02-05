@@ -72,6 +72,7 @@ Global
 		{56C66C4F-3C21-4929-BAF1-2EDA2EC56823}.Release|ARM.ActiveCfg = Release|ARM
 		{56C66C4F-3C21-4929-BAF1-2EDA2EC56823}.Release|ARM.Build.0 = Release|ARM
 		{56C66C4F-3C21-4929-BAF1-2EDA2EC56823}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{56C66C4F-3C21-4929-BAF1-2EDA2EC56823}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{56C66C4F-3C21-4929-BAF1-2EDA2EC56823}.Release|Win32.ActiveCfg = Release|Win32
 		{56C66C4F-3C21-4929-BAF1-2EDA2EC56823}.Release|Win32.Build.0 = Release|Win32
 		{56C66C4F-3C21-4929-BAF1-2EDA2EC56823}.Release|x64.ActiveCfg = Release|Win32
